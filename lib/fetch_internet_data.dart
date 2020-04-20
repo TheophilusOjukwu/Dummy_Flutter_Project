@@ -2,11 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'date_filter_form.dart';
 import 'form_config.dart';
-
-String line;
 
 Future<Album> fetchAlbum() async {
   final response =
@@ -73,7 +72,7 @@ class _FetchDataAppState extends State<FetchDataApp> {
       });
     }
   }
-
+/*
   Widget buildDateWidget(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -126,38 +125,41 @@ class _FetchDataAppState extends State<FetchDataApp> {
       ),
     );
   }
-
+*/
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Fetch Data Example',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Fetch Data ${FormConfig.from}'),
+    return ChangeNotifierProvider<FormConfig>(
+      create: (context) => FormConfig(),
+      child: MaterialApp(
+        title: 'Fetch Data Example',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
         ),
-        body: Column(
-          children: <Widget>[
-            DateFilterForm(),
-            Center(
-              child: FutureBuilder<Album>(
-                future: futureAlbum,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Text(snapshot.data.title);
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text('Fetch Data ${FormConfig.from}'),
+          ),
+          body: Column(
+            children: <Widget>[
+              DateFilterForm(),
+              Center(
+                child: FutureBuilder<Album>(
+                  future: futureAlbum,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Text(snapshot.data.title);
+                    } else if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
+                    }
 
-                  // By default, show a loading spinner.
-                  return CircularProgressIndicator();
-                },
+                    // By default, show a loading spinner.
+                    return CircularProgressIndicator();
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
