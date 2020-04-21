@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_projectz/form_config.dart';
+
 class DateFilterForm extends StatefulWidget {
   @override
   DateFilterFormState createState() {
     return DateFilterFormState();
   }
 }
+
 
 // Create a corresponding State class.
 // This class holds data related to the form.
@@ -27,17 +30,14 @@ class DateFilterFormState extends State<DateFilterForm> {
       print('From = $_from , To = $_to');
       Scaffold.of(context)
           .showSnackBar(SnackBar(content: Text('From = $_from , To = $_to')));
+
       setState(() {
-        FormConfig.from = _from;
+        //FormConfig.from = _from;
+        Provider.of<FormConfig>(context, listen: false).updateHttp(_from);
         print('******* $_from');
 
       });
     }
-  }
-
-  //TODO
-  void callBackMethod(){
-
   }
 
   @override
